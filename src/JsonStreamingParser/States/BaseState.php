@@ -1,5 +1,6 @@
 <?php namespace JsonStreamingParser\States;
 
+use JsonStreamingParser\MiniStack;
 use JsonStreamingParser_Listener;
 use SplDoublyLinkedList;
 
@@ -10,7 +11,7 @@ abstract class BaseState {
 	 */
 	protected $listener;
 	/**
-	 * @var SplDoublyLinkedList
+	 * @var MiniStack
 	 */
 	protected $stack;
 
@@ -18,7 +19,7 @@ abstract class BaseState {
 	 * @param JsonStreamingParser_Listener $listener
 	 * @param SplDoublyLinkedList                         $stack
 	 */
-	public function __construct( JsonStreamingParser_Listener $listener , SplDoublyLinkedList $stack ) {
+	public function __construct( JsonStreamingParser_Listener $listener , MiniStack $stack ) {
 
 		$this->listener = $listener;
 		$this->stack = $stack;
@@ -40,7 +41,7 @@ abstract class BaseState {
 	 * @return BaseState
 	 */
 	public function popState() {
-		return $this->stack->pop();
+		return $this->stack->pop($this->stack);
 	}
 
 	/**

@@ -41,7 +41,7 @@ class NumberState extends ValueState {
 			// we have consumed one beyond the end of the number.
 			// We know there will be a ValueWrapperState since our parent::__contruct hasn't run yet
 			// So we skip to the second last state available
-			$this->stack->offsetGet( 1 )->addChar( $c );
+			$this->stack->at(1)->addChar( $c );
 		}
 	}
 }

@@ -1,13 +1,13 @@
 <?php
+use JsonStreamingParser\MiniStack;
 use JsonStreamingParser\States\DocumentState;
-use JsonStreamingParser\States\StateException;
 
 require_once 'ParsingError.php';
 require_once 'Listener.php';
 
 class JsonStreamingParser_Parser {
 	/**
-   * @var SplDoublyLinkedList
+   * @var MiniStack
    */
   private $_stack;
 
@@ -18,7 +18,6 @@ class JsonStreamingParser_Parser {
    */
   private $_listener;
 
-  private $_buffer;
   private $_buffer_size;
 
   private $_char_number;
@@ -35,7 +34,7 @@ class JsonStreamingParser_Parser {
     $this->_stream = $stream;
     $this->_listener = $listener;
 
-    $this->_stack = new SplStack();
+    $this->_stack = new MiniStack();
     $this->_stack->push(new DocumentState($this->_listener, $this->_stack));
 
     $this->_buffer_size = 8192;
@@ -51,7 +50,7 @@ class JsonStreamingParser_Parser {
       $line = fread($this->_stream, $this->_buffer_size);
       $ended = (bool)(ftell($this->_stream) - strlen($line) - $pos);
       // if we're still at the same place after stream_get_line, we're done
-      $eof = ftell($this->_stream) == $pos; 
+      $eof = ftell($this->_stream) == $pos;
 
       $byteLen = strlen($line);
       for ($i = 0; $i < $byteLen; $i++) {
@@ -70,7 +69,7 @@ class JsonStreamingParser_Parser {
 
   private function _consume_char($c) {
     try {
-      $this->_stack->top()->addChar($c);
+      $this->_stack->last->addChar($c);
     }
     catch(Exception $e) {
       throw new JsonStreamingParser_ParsingError(0, $this->_char_number, $e->getMessage());

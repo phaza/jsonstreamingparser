@@ -1,11 +1,11 @@
 <?php namespace JsonStreamingParser\States;
 
+use JsonStreamingParser\MiniStack;
 use JsonStreamingParser_Listener;
-use SplStack;
 
 class DocumentState extends BaseState {
 
-	public function __construct( JsonStreamingParser_Listener $listener, SplStack $stack ) {
+	public function __construct( JsonStreamingParser_Listener $listener, MiniStack $stack ) {
 		parent::__construct( $listener, $stack );
 		$this->listener->start_document();
 	}
