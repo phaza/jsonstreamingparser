@@ -30,5 +30,4 @@ $parser->parse();
 echo "JSON size: " . stat(__DIR__ . '/Listener/data/ratherBig.json')['size'] . " bytes,
 Time: " . (microtime(true) - $time) . " sec.\n\n";
 
-
 assert($expected == $consumer->data);
